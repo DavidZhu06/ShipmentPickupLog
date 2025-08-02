@@ -1,0 +1,13 @@
+{
+    "name": "david.zhu/shipment-log",
+    "description": "Shipment Pickup Log",
+    "type": "project",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "David Zhu"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}
