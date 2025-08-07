@@ -15,16 +15,21 @@ try {
 
 
         // Get and sanitize form data (filter_sanitize_string is deprecated as of PHP 8.1)
-        $storename = filter_input(INPUT_POST, 'storename', FILTER_DEFAULT) ? htmlspecialchars(trim($_POST['storename']), ENT_QUOTES, 'UTF-8') : '';
-        $customStore = filter_input(INPUT_POST, 'customStore', FILTER_DEFAULT) ? htmlspecialchars(trim($_POST['customStore']), ENT_QUOTES, 'UTF-8') : '';
-        $shipref = filter_input(INPUT_POST, 'shipref', FILTER_DEFAULT) ? htmlspecialchars(trim($_POST['shipref']), ENT_QUOTES, 'UTF-8') : '';
-        $count = filter_input(INPUT_POST, 'count', FILTER_DEFAULT) ? htmlspecialchars(trim($_POST['count']), ENT_QUOTES, 'UTF-8') : '';
-        $id = filter_input(INPUT_POST, 'id', FILTER_DEFAULT) ? htmlspecialchars(trim($_POST['id']), ENT_QUOTES, 'UTF-8') : '';
-        $firstname = filter_input(INPUT_POST, 'firstname', FILTER_DEFAULT) ? htmlspecialchars(trim($_POST['firstname']), ENT_QUOTES, 'UTF-8') : '';
-        $lastname = filter_input(INPUT_POST, 'lastname', FILTER_DEFAULT) ? htmlspecialchars(trim($_POST['lastname']), ENT_QUOTES, 'UTF-8') : '';
-        $signature = filter_input(INPUT_POST, 'signature', FILTER_DEFAULT) ? htmlspecialchars(trim($_POST['signature']), ENT_QUOTES, 'UTF-8') : '';
-        $notes = filter_input(INPUT_POST, 'notes', FILTER_DEFAULT) ? htmlspecialchars(trim($_POST['notes']), ENT_QUOTES, 'UTF-8') : '';
+        $storename = trim($_POST['storename'] ?? ''); 
+        $customStore = trim($_POST['customStore'] ?? '');
+        $shipref = trim($_POST['shipref'] ?? '');
+        $count = trim($_POST['count'] ?? '');
+        $id = trim($_POST['id'] ?? '');
+        $firstname = trim($_POST['firstname'] ?? '');
+        $lastname = trim($_POST['lastname'] ?? '');
+        $signature = trim($_POST['signature'] ?? '');
+        $notes = trim($_POST['notes'] ?? '');
         $pickupdate = date('Y-m-d H:i:s');
+
+        // Validate signature format
+        if (!str_starts_with($signature, 'data:image/png;base64,')) {
+        $signature = ''; // If not valid Base64 PNG image, treat as empty
+        }
 
         // Basic validation
         if (!$storename || !$shipref || !$count || !$firstname || !$lastname || !$signature) {
