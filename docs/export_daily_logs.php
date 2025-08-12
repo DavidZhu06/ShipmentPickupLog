@@ -19,6 +19,7 @@ try {
     $today = date('Y-m-d');
     $filename = "shipment_log_{$today}.xlsx";
     $filepath = "\\\\BC-FS.idci.local\\Company\\ShipmentLog\\{$filename}";
+    $logFile  = "\\\\BC-FS.idci.local\\Company\\ShipmentLog\\shipment_export.log";
 
     // Query today’s records
     $stmt = $pdo->prepare("SELECT * FROM shipment_log WHERE DATE(submitted_at) = CURDATE()");
@@ -27,6 +28,11 @@ try {
 
     if (!$rows) {
         echo "No records found for today.";
+        file_put_contents(
+            $logFile,
+            "[" . date('Y-m-d H:i:s') . "] No records found.\n",
+            FILE_APPEND
+        );
         exit;
     }
 
@@ -45,11 +51,19 @@ try {
     $writer = new Xlsx($spreadsheet);
     $writer->save($filepath);
 
+    // Append to log file
+    $logMessage = "[" . date('Y-m-d H:i:s') . "] Exported {$filename} (" . count($rows) . " records) to {$filepath}\n";
+    file_put_contents($logFile, $logMessage, FILE_APPEND);
+
     echo "Export successful: $filename\n";
 
 } catch (PDOException $e) {
+    $errorMsg = "[" . date('Y-m-d H:i:s') . "] Database Error: " . $e->getMessage() . "\n";
+    file_put_contents($logFile, $errorMsg, FILE_APPEND);
     echo "Database Error: " . $e->getMessage();
 } catch (Exception $e) {
+    $errorMsg = "[" . date('Y-m-d H:i:s') . "] Export Error: " . $e->getMessage() . "\n";
+    file_put_contents($logFile, $errorMsg, FILE_APPEND);
     echo "Export Error: " . $e->getMessage();
 }
 ?>
