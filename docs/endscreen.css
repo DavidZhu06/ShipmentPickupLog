@@ -1,0 +1,68 @@
+body {
+    margin:0;
+    font-family: 'Inter', sans-serif;
+   /*Inter is the preferred font, sans-serif is the generic fallback font (if Inter doesn't load)*/
+    display: flex; /*turns HTML element into flexbox container*/
+    flex-direction: column; /*sets the direction of the flex container's MAIN AXIS (default is row)*/
+    justify-content: center; /*tells flex container to lay child elements vertically because flex direction is column*/
+    align-items: center; /*aligns all child elements along CROSS AXIS, which is horizontal in this case*/
+    min-height: 100vh; /*vh = viewport height   number in front is the % of*/
+    padding: 1rem; /*equals font size of html element*/
+    box-sizing: border-box; /*controls how browser calculates element size when viewport is changed (border box includes content + padding + layout)- responsive design*/
+    overflow-x: hidden; /*prevents horizontal scroll on small screens*/
+    background-color: #f0f0f0;
+}
+
+/* Container box */
+.flow-container {
+    background: #ffffff;
+    width: 600px;
+    max-width: 90%;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    overflow: hidden;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+/* Logo at the top */
+.logo {
+    width: 120px;
+    margin: 1rem 0;
+}
+
+/* Header and subtext */
+.welcome-text {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #333;
+    margin: 0.5rem 0;
+}
+
+.select-text {
+    font-size: 1.2rem;
+    color: #666;
+    margin: 0.5rem 0;
+    text-align: center; /* Center-align text */
+}
+
+/* New styles for date-time-box */
+.date-time-box {
+    display: inline; /* Keep inline to avoid extra spacing */
+    font-weight: bold; /* Bold the date */
+}
+
+.home-icon {
+  display: block;
+  margin: 0 auto 0 auto; /* Top margin, auto centers horizontally */
+  width: 80px;
+  height: 80px;
+}
+
+.home-icon img {
+  width: 100%;
+  height: auto;
+}
