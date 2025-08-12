@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <title>Shipment Pickup Log</title>
+
+    <style>
+    .separator {
+    text-align: center;
+    color: #888;
+    font-size: 1.3rem;
+    margin: 0.5rem 0rem 0rem;
+    }
+
+    #clearBtn:hover {
+      opacity: 0.9;
+    }
+    #clearBtn:active {
+      transform: scale(0.9);
+    }
+
+    .signature-container {
+      margin-bottom: 15px; /*Controls only the space between signature container and button*/
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    #signatureCanvas {
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      cursor: crosshair;
+      touch-action: none; /* Prevents default touch behaviors like scrolling */
+      width: 100%;
+      height: 350px;
+    }
+    </style>
+  </head>
+
+  <body>
+
+    <div class="container mt-5">
+    <h2 class="mb-4 text-center">Shipment Pickup Log</h2>
+    <form method="POST" action="storeDB.php">
+
+        <div class="separator">
+          <span>------- For IDCI Use Only --------</span>
+        </div>
+
+        <div class="mb-3">
+          <label for="storename" class="form-label">Store Name</label>
+          <select class="form-select" id="storename" name="storename" required onchange="toggleCustomInput()">
+            <option value="" selected disabled>Select a store</option>
+            <option value="CTC HEALTHCARE">CTC HEALTHCARE</option>
+            <option value="LIFEPLUS NATURAL HEALTH">LIFEPLUS NATURAL HEALTH</option>
+            <option value="Other">Other (please specify)</option>
+          </select>
+            <input type="text" class="form-control" id="customStore" name="customStore" placeholder="Enter Store Name" style="display:none; margin-top: 10px;" required/>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+          <label for="shipref" class="form-label">Shipment Reference #</label>
+          <input type="text" class="form-control" id="shipref" name="shipref" placeholder="Enter Reference #" required>
+          </div>
+
+          <div class="col-md-6 mb-3">
+          <label for="count" class="form-label">Piece Count</label>
+          <input type="number" class="form-control" id="count" name="count" placeholder="Enter Count" required>
+          </div>
+        </div>
+
+        <div class="separator">
+          <span>------- Customer Use --------</span>
+        </div>
+
+        <div class="mb-3">
+        <label for="id" class="form-label">Carrier Company Name & ID <b>OR</b> Driver License #</label>
+        <input type="text" class="form-control" id="id" name="id" placeholder="">
+        </div>
+
+        <div class="row g-3">
+            <div class="col-md-6 mb-3">
+            <label for="firstname" class="form-label">First Name</label>
+            <input type="text" class="form-control" id="firstname" name="firstname" placeholder="" required>
+            </div>
+
+            <div class="col-md-6 mb-3">
+            <label for="lastname" class="form-label">Last Name</label>
+            <input type="text" class="form-control" id="lastname" name="lastname" placeholder="" required>
+            </div>
+        </div>
+
+        <!--
+        <div class="mb-3">
+          <label for="signatureCanvas" class="form-label">Signature</label>
+          <canvas id="signatureCanvas" aria-label="Signature input canvas"></canvas>
+          <input type="hidden" id="signature" name="signature" required>
+        </div> -->
+        
+        <div class="signature-container">
+          <label for="signatureCanvas" style="margin-bottom: 10px;">Signature</label>
+          <canvas id="signatureCanvas"></canvas>
+          <input type="hidden" id="signature" name="signature" required>
+        </div>
+
+        <div class="d-flex justify-content-start mb-3">
+          <button type="button" id="clearBtn" class="btn btn-secondary me-2">Clear Signature</button>
+        </div>
+
+        <div class="mb-3">
+        <label for="notes" class="form-label">Notes</label>
+        <textarea class="form-control" id="notes" name="notes" rows="3" placeholder="Note any information as necessary."></textarea>
+        </div>
+
+        <div class="d-grid gap-2">
+          <button type="submit" id="submitBtn" class="btn btn-primary btn-lg">Submit</button>
+        </div>
+    </form>
+    </div>
+
+
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+    -->
+
+    <script src="signature.js"></script>
+
+    <script>
+      function toggleCustomInput() {
+        const select = document.getElementById("storename");
+        const customInput = document.getElementById("customStore");
+
+        if (select.value === "Other") {
+          customInput.style.display = "block";
+          customInput.required = true;
+        } 
+        else {
+          customInput.style.display = "none";
+          customInput.required = false;
+          customInput.value = ""; // Clear the input if not needed
+        }
+      }
+    </script>
+
+  </body>
+</html>
