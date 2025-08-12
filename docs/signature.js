@@ -41,24 +41,17 @@ function redrawSignature() {
 // Get canvas coordinates
 function getCanvasCoordinates(event) {
   const rect = canvas.getBoundingClientRect();
-  const scaleX = canvas.width / rect.width;
-  const scaleY = canvas.height / rect.height;
-
-  let clientX, clientY;
   if (event.type.startsWith('touch')) {
-    clientX = event.touches[0].clientX;
-    clientY = event.touches[0].clientY;
-  } else {
-    clientX = event.clientX;
-    clientY = event.clientY;
+    return {
+      x: event.touches[0].clientX - rect.left,
+      y: event.touches[0].clientY - rect.top
+    };
   }
-
   return {
-    x: (clientX - rect.left) * scaleX,
-    y: (clientY - rect.top) * scaleY
+    x: event.clientX - rect.left,
+    y: event.clientY - rect.top
   };
 }
-
 
 // Start drawing
 function startDrawing(e) {
