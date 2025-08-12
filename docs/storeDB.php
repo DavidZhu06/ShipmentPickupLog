@@ -26,14 +26,16 @@ try {
         $notes = trim($_POST['notes'] ?? '');
         $pickupdate = date('Y-m-d H:i:s');
 
-        // Validate signature format
-        if (!str_starts_with($signature, 'data:image/png;base64,')) {
-        $signature = ''; // If not valid Base64 PNG image, treat as empty
+        if (!str_starts_with($_POST['signature'] ?? '', 'data:image/png;base64,')) {
+            $signature = '';
+        } else {
+            $signature = preg_replace('/^data:image\/(png|jpeg);base64,/', '', $_POST['signature']);
         }
 
-        // Basic validation
+        // Form validation 
         if (!$storename || !$shipref || !$count || !$firstname || !$lastname || !$signature) {
-            die("Missing required fields");
+            echo "<script>alert('Please fill in all required fields before submitting.'); history.back();</script>";
+            exit;
         }
 
         // Determine the storename to store
