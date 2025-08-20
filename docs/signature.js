@@ -1,3 +1,9 @@
+// Global error handler — catches any JS errors before they break your form logic
+window.addEventListener("error", function (event) {
+  console.error("JavaScript error:", event.message);
+  alert("An error occurred. Please refresh the page before submitting.");
+});
+
 const canvas = document.getElementById('signatureCanvas'); /*.getElementbyID is a built-in js method that searches document (whole loaded HTML page) for element with ID attribute equal to signatureCanvas
 const canvas: stores that HTML element in constant variable called canvas*/
 const ctx = canvas.getContext('2d'); /*Saves 2d drawing context of <canvas> element to ctx variable */
@@ -100,17 +106,46 @@ document.getElementById('clearBtn').addEventListener('click', () => {
   document.getElementById('signature').value = '';
 });
 
+
+// Resize canvas on load and window resize
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
 // Update signature input before form submission
-document.getElementById('submitBtn').addEventListener('click', () => {
+/*document.getElementById('submitBtn').addEventListener('click', () => {
   if (signatureData.length > 0) {
     const signature = canvas.toDataURL('image/png');
     document.getElementById('signature').value = signature;
   } else {
     alert('Please provide a signature before submitting.');
   }
+});*/
+
+const form = document.querySelector("form");
+const submitBtn = document.getElementById("submitBtn");
+
+// Handle form submit
+form.addEventListener("submit", function (e) {
+  // Check signature first
+  if (signatureData.length === 0) {
+    e.preventDefault(); // Stop form submit
+    alert("Please provide a signature before submitting.");
+    return;
+  }
+
+  // Save signature to hidden input
+  const signature = canvas.toDataURL("image/png");
+  document.getElementById("signature").value = signature;
+
+  // Disable button and show loading text
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Submitting...";
+  submitBtn.classList.add("disabled");
+
+  // Re-enable after 5 seconds (only matters if page doesn't reload)
+  setTimeout(() => {
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Submit";
+    submitBtn.classList.remove("disabled");
+  }, 5000);
 });
-
-
-// Resize canvas on load and window resize
-window.addEventListener('resize', resizeCanvas);
-resizeCanvas();

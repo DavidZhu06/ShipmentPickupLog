@@ -32,6 +32,17 @@ try {
             $signature = preg_replace('/^data:image\/(png|jpeg);base64,/', '', $_POST['signature']);
         }
 
+        // Ensure signature is a valid base64 PNG and has enough data
+        if (
+            empty($signature) ||
+            strlen($signature) < 2000 || // reject tiny "blank" signatures
+            !preg_match('/^[A-Za-z0-9+\/=]+$/', $signature) // valid base64 only
+        ) {
+            echo "<script>alert('Signature is missing or invalid. Please sign before submitting.'); history.back();</script>";
+            exit;
+        }
+
+
         // Form validation 
         if (!$storename || !$shipref || !$count || !$firstname || !$lastname || !$signature) {
             echo "<script>alert('Please fill in all required fields before submitting.'); history.back();</script>";
