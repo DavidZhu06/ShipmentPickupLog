@@ -1,2 +1,2 @@
 # ShipmentPickupLog
-As part of IDCI Summer IT Internship. Project to digitalize the Shipment Log process. 
+IT Internship - Imperial. Project to digitalize and streamline the Shipment Log process. 
